@@ -535,4 +535,22 @@ public class SystemTextJsonTests
         array.Should().HaveCount(1);
         array.First().GetString().Should().Be("Doe");
     }
+
+    [Theory]
+    [InlineData("== true")]
+    [InlineData("== \"true\"")]
+    [InlineData("== 1")]
+    [InlineData("== \"1\"")]
+    [InlineData("== \"something\"")]
+    [InlineData("> 1")]
+    [InlineData("< 1")]
+    public void Where_With_NonExistingMember(string conditionValue)
+    {
+        // Act
+        var result = _source.Where($"notExisting {conditionValue}");
+
+        // Assert
+        var array = result.RootElement.EnumerateArray();
+        array.Should().BeEmpty();
+    }
 }

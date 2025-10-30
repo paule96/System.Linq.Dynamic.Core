@@ -506,4 +506,21 @@ public class NewtonsoftJsonTests
         var first = result.First();
         first.Value<string>().Should().Be("Doe");
     }
+
+    [Theory]
+    [InlineData("== true")]
+    [InlineData("== \"true\"")]
+    [InlineData("== 1")]
+    [InlineData("== \"1\"")]
+    [InlineData("== \"something\"")]
+    [InlineData("> 1")]
+    [InlineData("< 1")]
+    public void Where_With_NonExistingMember(string conditionValue)
+    {
+        // Act
+        var result = _source.Where($"notExisting {conditionValue}");
+
+        // Assert
+        result.Should().BeEmpty();
+    }
 }
